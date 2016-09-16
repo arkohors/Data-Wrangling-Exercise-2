@@ -1,0 +1,34 @@
+> t_df <- read.csv("~/titanic_original.csv")
+> View(t_df)
+> library(dplyr)
+
+glimpse(t_df)
+
+> summary(t_df$embarked)
+      C   Q   S 
+  3 270 123 914 
+#checks if any records in the embarked column are NA
+> any(is.na(t_df$embarked))
+
+#changes empty strings to "S"
+t_df$embarked[t_df$embarked == ""] <- "S"
+
+#calculating mean of age, replacing missing age values with average
+> mean(t_df$age)
+[1] NA
+> mean(t_df$age, na.rm = TRUE)
+[1] 29.88113
+> mean_age<-mean(t_df$age, na.rm = TRUE)
+> summary(t_df$age)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+ 0.1667 21.0000 28.0000 29.8800 39.0000 80.0000     264 
+> t_df$age[t_df$age == is.na()] <- mean_age
+Error in is.na() : 0 arguments passed to 'is.na' which requires 1
+> t_df$age[is.na(t_df$age)] <- mean_age
+> summary(t_df$age)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.1667 22.0000 29.8800 29.8800 35.0000 80.0000 
+
+
+#Create new column, 1 if has cabin number, 0 if not:
+t_df$has_cabin_number <- ifelse(t_df$cabin == "", 0, 1)
